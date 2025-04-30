@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
 const tempMovieData = [
   {
@@ -23,7 +23,7 @@ const tempMovieData = [
       "https://m.media-amazon.com/images/M/MV5BYWZjMjk3ZTItODQ2ZC00NTY5LWE0ZDYtZTI3MjcwN2Q5NTVkXkEyXkFqcGdeQXVyODk4OTc3MTY@._V1_SX300.jpg",
   },
 ];
-
+//
 const tempWatchedData = [
   {
     imdbID: "tt1375666",
@@ -50,15 +50,24 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+
+
 const KEY= "3156a2fc"
-
+const query = 'avengers'
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
 
-  fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=avengers`).then(res => res.json()).then(data => {
-    console.log(data)
-  })
+  useEffect(function() {
+    async function fetchMovies(){
+      const res=await fetch(`https://www.omdbapi.com/?apikey=${KEY}&s=${query}`)
+      const data = await res.json();
+      setMovies(data.Search);
+    }
+    fetchMovies()
+  },[])
+
+
 
   return (
       <>
